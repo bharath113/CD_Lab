@@ -51,8 +51,8 @@ close ".h>"
 "while"	 {ECHO; printf(" Keyword\n");}
 "printf" {ECHO; printf(" Function\n");}
 "scanf" {ECHO; printf(" Function\n");}
+{D}*+"."+{D}* {ECHO; printf(" Floating number\n");}
 {D}* {ECHO; printf(" Integer\n");}
-{D}*+'.'+{D}* {ECHO; printf(" Floating number\n");}
 {Qu}+({L}|{D})*+{Qu} {ECHO; printf(" This is the string\n");} 
 {L}({L}|{D})* {ECHO; printf(" Identifier\n");}
 "--" {ECHO; printf(" operator\n");}

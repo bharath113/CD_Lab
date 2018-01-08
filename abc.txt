@@ -3,6 +3,8 @@
 void main()
 {
 int a,b,c;
+float d;
+d=2.34;
 a=0;
 b=1;
 c=2;
