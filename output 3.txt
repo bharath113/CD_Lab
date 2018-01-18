@@ -1,0 +1,35 @@
+
+ Symbol Table Format is:
+ 	Lexeme				Token			Attribute Value
+
+   #include<stdio.h>                 Pre processor                   0
+              struct                       Keyword                   1
+              values                    Identifier                   2
+                   {                    Punctuator                   3
+                 int                       Keyword                   4
+                  cd                    Identifier                   5
+                   ;                    Punctuator                   6
+                   }                    Punctuator                   7
+                void                       Keyword                   8
+                main                    Identifier                   9
+                   (                    Punctuator                  10
+                   )                    Punctuator                  11
+     long long float                       Keyword                  12
+                   d                    Identifier                  13
+                   ,                    Punctuator                  14
+                   c                    Identifier                  15
+                   =                      Operator                  16
+                   0                      Constant                  17
+                   v                    Identifier                  18
+                   i                    Identifier                  19
+                   3                      Constant                  20
+                v.cd                    Identifier                  21
+                   5                      Constant                  22
+               scanf              Inbuilt Function                  23
+              "%llf"                        String                  24
+                   &                      Operator                  25
+               while                       Keyword                  26
+                  --                      Operator                  27
+                  ++                      Operator                  28
+                   >                      Operator                  29
+              Printf                    Identifier                  30
