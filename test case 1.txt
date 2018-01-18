@@ -1,0 +1,21 @@
+#include<stdio.h> 
+#define A 5 
+ 
+int add(int a,int b)
+{
+ return a+b;
+}
+
+void main() 
+{ 
+/* Normal comments*/ 
+int a,b; 
+float c,d,e;
+a=5; 
+b=a; 
+a=add(a,b);
+c=10.32;
+d=12.33;
+e=c-d;
+printf("%d %f",a,e);
+} 
