@@ -11,7 +11,7 @@ long long float d,c=0;
 struct values v; 
 int i=3; 
 v.cd=5; 
-scanf(“%llf”,&d); 
+scanf("%llf",&d); 
 while(d--) 
  { 
    c++; 
@@ -25,5 +25,5 @@ while(i--)
   } 
 } 
  
-Printf(“%llf”,c); 
+Printf("%llf",c); 
 } 
