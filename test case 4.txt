@@ -2,8 +2,8 @@
 Void main() 
 { 
 /*Nested /* comments. */ This is error*/ 
-char a[10] = “asdas; 
-int a”b; 
-printf(“hello); 
+char a[10] = "asdas; 
+int a"b; 
+printf("hello); 
 } 
  
