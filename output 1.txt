@@ -6,27 +6,26 @@
              #define                 Pre processor                   1
                    A                    Identifier                   2
                    5                      Constant                   3
-                 int                       Keyword                   4
-                 add                    Identifier                   5
+                void                       Keyword                   4
+                main                    Identifier                   5
                    (                    Punctuator                   6
-                   a                    Identifier                   7
-                   ,                    Punctuator                   8
-                   b                    Identifier                   9
-                   )                    Punctuator                  10
-                   {                    Punctuator                  11
-              return                       Keyword                  12
-                   +                      Operator                  13
-                   ;                    Punctuator                  14
-                   }                    Punctuator                  15
-                void                       Keyword                  16
-                main                    Identifier                  17
-               float                       Keyword                  18
-                   c                    Identifier                  19
-                   d                    Identifier                  20
-                   e                    Identifier                  21
-                   =                      Operator                  22
-               10.32                      Constant                  23
-               12.33                      Constant                  24
-                   -                      Operator                  25
-              printf              Inbuilt Function                  26
-             "%d %f"                        String                  27
+                   )                    Punctuator                   7
+                   {                    Punctuator                   8
+                 int                       Keyword                   9
+                   a                    Identifier                  10
+                   ,                    Punctuator                  11
+                   b                    Identifier                  12
+                   ;                    Punctuator                  13
+               float                       Keyword                  14
+                   c                    Identifier                  15
+                   d                    Identifier                  16
+                   e                    Identifier                  17
+               f[10]                         Array                  18
+                   =                      Operator                  19
+                   +                      Operator                  20
+               10.32                      Constant                  21
+               12.33                      Constant                  22
+                   -                      Operator                  23
+              printf              Inbuilt Function                  24
+             "%d %f"                        String                  25
+                   }                    Punctuator                  26

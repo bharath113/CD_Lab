@@ -9,10 +9,9 @@
                    )                    Punctuator                   4
                    {                    Punctuator                   5
                 char                       Keyword                   6
-                   a                    Identifier                   7
-                  10                      Constant                   8
-                   =                      Operator                   9
-                   ;                    Punctuator                  10
-                 int                       Keyword                  11
-              printf              Inbuilt Function                  12
-                   }                    Punctuator                  13
+               a[10]                         Array                   7
+                   =                      Operator                   8
+                   ;                    Punctuator                   9
+                 int                       Keyword                  10
+              printf              Inbuilt Function                  11
+                   }                    Punctuator                  12

@@ -16,22 +16,22 @@
                    e                    Identifier                  11
                    ;                    Punctuator                  12
                 char                       Keyword                  13
-                   d                    Identifier                  14
-                  10                      Constant                  15
-                   =                      Operator                  16
-             "Hello"                        String                  17
-                 5.3                      Constant                  18
-                2.65                      Constant                  19
-                   +                      Operator                  20
-               scanf              Inbuilt Function                  21
-                "%f"                        String                  22
-                   &                      Operator                  23
-                  if                       Keyword                  24
-                   >                      Operator                  25
-                 5.0                      Constant                  26
-              printf              Inbuilt Function                  27
-                else                       Keyword                  28
-                   <                      Operator                  29
-                "%s"                        String                  30
+               d[10]                         Array                  14
+                   =                      Operator                  15
+             "Hello"                        String                  16
+                 5.3                      Constant                  17
+                2.65                      Constant                  18
+                   +                      Operator                  19
+               scanf              Inbuilt Function                  20
+                "%f"                        String                  21
+                   &                      Operator                  22
+                  if                       Keyword                  23
+                   >                      Operator                  24
+                 5.0                      Constant                  25
+              printf              Inbuilt Function                  26
+                else                       Keyword                  27
+                   <                      Operator                  28
+                "%s"                        String                  29
+                   d                    Identifier                  30
            "Nothing"                        String                  31
                    }                    Punctuator                  32
