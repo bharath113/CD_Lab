@@ -22,6 +22,7 @@ O [-+*/=<>|"=="]
 WS [ \t\n]
 E [Ee][-+]?{D}+
 PUN [,.;]
+U [_]
 Qu ["']
 per [%&]
 Keyword "break"|"case"|"continue"|"default"|"enum"|"register"|"return"|"sizeof"|"static"|"typedef"|"void"|"volatile"
@@ -31,14 +32,17 @@ Condition "if"|"else"|"switch"
 
 EDT "auto"|"short"|"long"|"const"|"extern"|"signed"|"unsigned"
 FS "d"|"f"|"c"|"s"|"ld"|"lf"
+SB "["|"]"
+
 
 headerFunc "printf"|"scanf"
 header "#include<"
 close ".h>"
 def "#define"|"# define"
 String {Qu}+({L}|{D}|{per}|" ")*+{Qu}
-IFR {L}({L}|{D})*
-
+IFR ({L}|{U})({L}|{D})*
+array {IFR}{SB}{D}*{SB}
+wl {D}({L}|{D})*
 %%
 "/*" { comm++; }
 "*/" if(comm==1){ comm--; } else { comm--; printf("Error: Encountered a */ before /*\n"); }
@@ -58,10 +62,13 @@ IFR {L}({L}|{D})*
 {D}*                                          {if(comm==0){  insert(yytext,'C');}}
 {String}                                      {if(comm==0){ insert(yytext,'s');} } 
 
+
+{array}                                      {if(comm==0){ insert(yytext,'a'); }}
 {Qu}+{IFR} { {printf(" %s Error Quotes not ended \n",yytext);}}
 {IFR}+{Qu}+{IFR} { {printf(" %s Error Wrong usage of Quotes \n",yytext);}}
 {IFR}+{Qu} { {printf(" %s Error Quotes not started \n",yytext);}}
 
+{wl}  { {printf(" %s Wrong language used\n",yytext);} }
 {IFR}                                          {if(comm==0&&quo==0){  insert(yytext,'v');}}
 
 {IFR}+"."+{IFR}                                {if(comm==0){  insert(yytext,'v');} }
@@ -79,15 +86,14 @@ IFR {L}({L}|{D})*
 {O}                                            {if(comm==0){ insert(yytext,'o');}}
 
 {WS} {}
-"[" {}
-"]" {}
+{SB} {}
 . { printf(" %s Errors\n",yytext);}
 %%
 
 int main()
 {
-yyin=fopen("test case 4.txt","r");
-yyout=fopen("output 4.txt","w");
+yyin=fopen("test case 5.txt","r");
+yyout=fopen("output 5.txt","w");
 fprintf(yyout,"\n Symbol Table Format is:\n \tLexeme\t\t\t\tToken\t\t\tAttribute Value\n");
 yylex();
 if(comm>0) { printf("Comments does not end"); }
@@ -108,6 +114,9 @@ void insert(char *yytext,char t)
 	nextptr=head;
     switch(t)
     {
+        case 'a':
+             strcpy(token,"Array");
+             break;
         case 'k':
         case 'd':
         case 'l':
