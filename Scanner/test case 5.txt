@@ -1,0 +1,13 @@
+#include<stdio.h>
+
+void main()
+{
+int a[10];
+int 0b,_l;
+_l=15;
+0b=10;
+printf("%d",_l);
+printf("hsbda \" asd \" sa");
+}
+/* /* These comments are wrong */ygvg*/
+/* /* These are valid comments */

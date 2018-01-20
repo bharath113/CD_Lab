@@ -1,0 +1,11 @@
+#include<stdio.h> 
+
+Void main() 
+{ 
+/*Nested /* comments. */ This is error*/ 
+char a[10] = "asdas; 
+int a"b; 
+printf("hello); 
+printf("hello /" hi ");
+} 
+ 

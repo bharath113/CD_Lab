@@ -1,0 +1,41 @@
+
+ Symbol Table Format is:
+ 	Lexeme				Token			Line No			Attribute Value
+
+   #include<stdio.h>                 Pre processor                   1                   0
+                void                       Keyword                   3                   1
+                main                    Identifier                   3                   2
+                   (                    Punctuator                   3                   3
+                   )                    Punctuator                   3                   4
+                   {                    Punctuator                   4                   5
+                 int                       Keyword                   5                   6
+                   a                    Identifier                   5                   7
+                   [                    Punctuator                   5                   8
+                  10                      Constant                   5                   9
+                   ]                    Punctuator                   5                  10
+                   ;                    Punctuator                   5                  11
+                 int                       Keyword                   6                   6
+                   ,                    Punctuator                   6                  12
+                  _l                    Identifier                   6                  13
+                   ;                    Punctuator                   6                  11
+                  _l                    Identifier                   7                  13
+                   =                      Operator                   7                  14
+                  15                      Constant                   7                  15
+                   ;                    Punctuator                   7                  11
+                   =                      Operator                   8                  14
+                  10                      Constant                   8                   9
+                   ;                    Punctuator                   8                  11
+              printf                    Identifier                   9                  16
+                   (                    Punctuator                   9                   3
+                "%d"                        String                   9                  17
+                   ,                    Punctuator                   9                  12
+                  _l                    Identifier                   9                  13
+                   )                    Punctuator                   9                   4
+                   ;                    Punctuator                   9                  11
+              printf                    Identifier                  10                  16
+                   (                    Punctuator                  10                   3
+"hsbda \" asd \" sa"                        String                  10                  18
+                   )                    Punctuator                  10                   4
+                   ;                    Punctuator                  10                  11
+                   }                    Punctuator                  11                  19
+                ygvg                    Identifier                  12                  20

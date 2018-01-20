@@ -1,0 +1,69 @@
+
+ Symbol Table Format is:
+ 	Lexeme				Token			Line No			Attribute Value
+
+   #include<stdio.h>                 Pre processor                   1                   0
+             #define                 Pre processor                   2                   1
+                   A                    Identifier                   2                   2
+                   5                      Constant                   2                   3
+                void                       Keyword                   4                   4
+                main                    Identifier                   4                   5
+                   (                    Punctuator                   4                   6
+                   )                    Punctuator                   4                   7
+                   {                    Punctuator                   5                   8
+                 int                       Keyword                   7                   9
+                   a                    Identifier                   7                  10
+                   ,                    Punctuator                   7                  11
+                   b                    Identifier                   7                  12
+                   ;                    Punctuator                   7                  13
+               float                       Keyword                   8                  14
+                   c                    Identifier                   8                  15
+                   ,                    Punctuator                   8                  11
+                   d                    Identifier                   8                  16
+                   ,                    Punctuator                   8                  11
+                   e                    Identifier                   8                  17
+                   ;                    Punctuator                   8                  13
+                 int                       Keyword                   9                   9
+                   f                    Identifier                   9                  18
+                   [                    Punctuator                   9                  19
+                  10                      Constant                   9                  20
+                   ]                    Punctuator                   9                  21
+                   ;                    Punctuator                   9                  13
+                   a                    Identifier                  10                  10
+                   =                      Operator                  10                  22
+                   5                      Constant                  10                   3
+                   ;                    Punctuator                  10                  13
+                   b                    Identifier                  11                  12
+                   =                      Operator                  11                  22
+                   a                    Identifier                  11                  10
+                   ;                    Punctuator                  11                  13
+                   a                    Identifier                  12                  10
+                   =                      Operator                  12                  22
+                   a                    Identifier                  12                  10
+                   +                      Operator                  12                  23
+                   b                    Identifier                  12                  12
+                   ;                    Punctuator                  12                  13
+                   c                    Identifier                  13                  15
+                   =                      Operator                  13                  22
+               10.32                      Constant                  13                  24
+                   ;                    Punctuator                  13                  13
+                   d                    Identifier                  14                  16
+                   =                      Operator                  14                  22
+               12.33                      Constant                  14                  25
+                   ;                    Punctuator                  14                  13
+                   e                    Identifier                  15                  17
+                   =                      Operator                  15                  22
+                   c                    Identifier                  15                  15
+                   -                      Operator                  15                  26
+                   d                    Identifier                  15                  16
+                   ;                    Punctuator                  15                  13
+              printf                    Identifier                  16                  27
+                   (                    Punctuator                  16                   6
+             "%d %f"                        String                  16                  28
+                   ,                    Punctuator                  16                  11
+                   a                    Identifier                  16                  10
+                   ,                    Punctuator                  16                  11
+                   e                    Identifier                  16                  17
+                   )                    Punctuator                  16                   7
+                   ;                    Punctuator                  16                  13
+                   }                    Punctuator                  17                  29
