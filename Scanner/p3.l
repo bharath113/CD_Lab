@@ -89,7 +89,7 @@ wl {D}({L}|{D})*
 
 {WS} {}
 {SB} {if(comm==0){ insert(yytext,'p',line);} }
-. { printf(" %s Errors at line %d\n",yytext,line);}
+. ;
 %%
 
 int main()
