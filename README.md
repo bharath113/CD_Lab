@@ -14,7 +14,9 @@
 
 ### Commands to run the lexical analyser in terminal
 `cd Scanner`
-`lex p3.l`
-`gcc lex.yy.c`
-`./a.out`
 
+`lex p3.l`
+
+`gcc lex.yy.c`
+
+`./a.out`
