@@ -1,6 +1,6 @@
 %option noyywrap
 %{
- #include"exp.tab.h"s
+ #include "yacc.tab.h"
  int yylineno=1;
 %}
 datatype "int"|"float"|"char"|"long"
