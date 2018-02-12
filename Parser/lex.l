@@ -13,7 +13,7 @@ coperators "&&"|"||"
 unary     "++"|"--"
 dot [.]
 decimal {digit}{digit}*{dot}{digit}{digit}*
-sign [-+]
+sign [-]
 negnum {sign}{digit}+
 %%
 [\t ]
@@ -30,8 +30,15 @@ break             {return BREAK;}
 return           {return RETURN;}
 {datatype}         {return TYPE;}
 main        {return ID;}
+";"         {return SEMI;}
+","         {return COMMA;}
+"("         {return BO;}
+")"         {return BC;}
+"{"         {return FO;}
+"}"         {return FC;}
 ({digit}+|{decimal}|{negnum})    {return NUM;}
 {alpha}({alpha}|{digit})* {return ID;}
-
+\/\/.*			;
+\/\*(.\n)*\*\/	;
 .                return yytext[0];
 %%
