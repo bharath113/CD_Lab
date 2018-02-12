@@ -5,44 +5,46 @@
 %token ID NUM TYPE MAIN HEAD WHILE OP COP FOR UN IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC
 
 %% 
-S : M {printf("input accepted");exit(0);}
+S : M {printf("\nParsing Completed");exit(0);}
 M: HEADER ST;
 HEADER : HEADER HEAD | ;
 
 ST :   TYPE ID BO ARG BC FO BODY FC ST | ; 
 
-ARG : DEC COMMA ARG |DEC |   ;
+ARG : SDEC| |error;
+SDEC : TYPE ID| TYPE ID COMMA SDEC | error;
 
-BODY : BODY BODY | R SEMI | DEC SEMI| WLOOP | FLOOP | IFEL | EXP SEMI | RET SEMI | BREAK SEMI  |  ;
-SINGLE : R SEMI|DEC SEMI|WLOOP|FLOOP|RET SEMI|COND SEMI|BREAK SEMI|EXP SEMI| IFEL ;
+BODY : BODY BODY | R SEMI | DEC SEMI| WLOOP | FLOOP | IFEL |EXP SEMI | RET SEMI | BREAK SEMI |SEMI |  ;
+SINGLE : R SEMI|DEC SEMI|WLOOP|FLOOP|RET SEMI|BREAK SEMI|EXP SEMI|COND SEMI| IFEL ;
 
-RET :  RETURN K ;
-K : ID|NUM ;
+RET :  RETURN K | error ;
+K : ID|NUM | error;
 
-R : E '=' E | E ;
-E : E '+' T | T ;
-T : T '-' P | P ;
-P : P '*' S | S ;
-S : S '/' Q | Q ;
-Q : Q UN | ID | NUM ;
+R : ID '=' E | E | error ;
+E : E '+' P | P |E '-' P | error ;
+P : P '*' SS | SS | error ;
+SS : SS '/' Q | Q  | error ;
+Q :  Q UN | ID | NUM | '('E')' | error ;
 
-DEC : TYPE VAR ;
-VAR : TT COMMA VAR | TT ;
-TT : ID | ID '=' NUM ;
+DEC : TYPE VAR | error;
+VAR : TT COMMA VAR | TT | error;
+TT : ID | ID '=' K| error;
+K: ID | NUM |error;
 
-WLOOP : WHILE BO COND BC WDEF ;
-WDEF : FO BODY FC | SINGLE ;
+WLOOP : WHILE BO COND BC WDEF | error;
+WDEF : FO BODY FC | SINGLE | error;
 
-COND : EXP COP COND| EXP ;
-EXP : ID | ID OP ID | ID OP NUM | NUM;
+COND : EXP COP COND| EXP | error;
+EXP :  ID | ID OP ID | ID OP NUM |NUM| error;
 
-FLOOP : FOR BO R SEMI COND SEMI R BC FDEF ;
-FDEF : FO BODY FC | SINGLE ;
+FLOOP : FOR BO A SEMI COND SEMI R BC FDEF | error;
+A : TYPE R | R |error;
+FDEF : FO BODY FC | SINGLE | error;
 
-IFEL : IF BO COND BC IDEF 
-       | IF BO COND BC IDEF ELSE IDEF ;
+IFEL : IF BO COND BC IDEF | error
+       | IF BO COND BC IDEF ELSE IDEF | error;
 
-IDEF : FO BODY FC | SINGLE ;
+IDEF : FO BODY FC | SINGLE | error;
 
 %%
 
@@ -50,11 +52,11 @@ IDEF : FO BODY FC | SINGLE ;
 extern int yylineno;
 void yyerror()
  {
-  printf("Invalid expression at %d",yylineno);
+  printf("Invalid expression at %d\n",yylineno);
  }
  extern FILE *yyin;
 int main()
  {
-  yyin=fopen("input.txt","r");
+  yyin=fopen("6.c","r");
   yyparse();
  }

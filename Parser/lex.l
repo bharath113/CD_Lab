@@ -18,26 +18,26 @@ negnum {sign}{digit}+
 %%
 [\t ]
 [\n] {yylineno++;}
-{noperators}      {return OP;}
-{coperators}       {return COP;}
-{unary}            {return UN;}
-{header}(.)*{had} {return HEAD;}
-while             {return WHILE;}
-for               {return FOR;} 
-if		  {return IF;}
-else              {return ELSE;} 
-break             {return BREAK;} 
-return           {return RETURN;}
-{datatype}         {return TYPE;}
-main        {return ID;}
-";"         {return SEMI;}
-","         {return COMMA;}
-"("         {return BO;}
-")"         {return BC;}
-"{"         {return FO;}
-"}"         {return FC;}
-({digit}+|{decimal}|{negnum})    {return NUM;}
-{alpha}({alpha}|{digit})* {return ID;}
+{noperators}      {  return OP;}
+{coperators}       {  return COP;}
+{unary}            {  return UN;}
+{header}(.)*{had} {  return HEAD;}
+while             {  return WHILE;}
+for               {  return FOR;} 
+if		  {  return IF;}
+else              {  return ELSE;} 
+break             {  return BREAK;} 
+return           {  return RETURN;}
+{datatype}         {  return TYPE;}
+main        {  return ID;}
+";"         {  return SEMI;}
+","         {  return COMMA;}
+"("         {  return BO;}
+")"         {  return BC;}
+"{"         {  return FO;}
+"}"         {  return FC;}
+({digit}+|{decimal}|{negnum})    {  return NUM;}
+{alpha}({alpha}|{digit})* {  return ID;}
 \/\/.*			;
 \/\*(.\n)*\*\/	;
 .                return yytext[0];
