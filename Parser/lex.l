@@ -1,6 +1,6 @@
 %option noyywrap
 %{
- #include "y.tab.h"
+ #include "yacc.tab.h"
  void insert(char *yytext,char t,int l,char *type);
  struct Storage
 {
@@ -11,14 +11,16 @@
 }*st,*head;
 int var_cnt=0;
 char data[10];
+int yylineno=1;
+void print();
 %}
 datatype "int"|"float"|"char"
-alpha [a-zA-Z]
+A [a-zA-Z]
 digit [0-9]
 header "#include<"
 had  ".h>"
-noperators ">="|"<="|"=="|">"|"<"|"!="|"-="|"+="|"*="|"/="
-coperators "&&"|"||"
+ope ">="|"<="|"=="|">"|"<"|"!="|"-="|"+="|"*="|"/="
+conope "&&"|"||"
 unary     "++"|"--"
 dot [.]
 decimal {digit}{digit}*{dot}{digit}{digit}*
@@ -27,8 +29,8 @@ negnum {sign}{digit}+
 %%
 [\t ]
 [\n] {yylineno++;}
-{noperators}      { insert(yytext,'O',yylineno,"NA"); return OP;}
-{coperators}       { insert(yytext,'O',yylineno,"NA"); return COP;}
+{ope}      { insert(yytext,'O',yylineno,"NA"); return OP;}
+{conope}       { insert(yytext,'O',yylineno,"NA"); return COP;}
 {unary}            { insert(yytext,'O',yylineno,"NA"); return UN;}
 {header}(.)*{had} {  return HEAD;}
 while             {  insert(yytext,'K',yylineno,"NA");return WHILE;}
@@ -48,8 +50,8 @@ main        {  insert(yytext,'M',yylineno,"NA");return ID;}
 {digit}+   {insert(yytext,'N',yylineno,"Int");  return NUM;}
 {decimal}   {insert(yytext,'N',yylineno,"Float");  return NUM;}
 {negnum}    {insert(yytext,'N',yylineno,"Int");  return NUM;}
-{alpha}({alpha}|{digit})* { insert(yytext,'V',yylineno,data); return ID;}
-\/\/.*			;
+{A}({A}|{digit})* { insert(yytext,'V',yylineno,data); return ID;}
+\/\/.*			; 
 \/\*(.\n)*\*\/	;
 .                return yytext[0];
 %%
@@ -109,10 +111,16 @@ void insert(char *yytext,char t,int l, char *type)
 			else
 				symbol->next = temp;
 			var_cnt++;
-			 printf("%s \t %s \t %d \t %s\n",yytext,token,l,type);
+
         }
     
     
 }
-
+ void print()
+ {
+  struct Storage *nextp=head;
+  for(;nextp!=NULL;nextp=nextp->next)\
+      if(strcmp(nextp->token,"Identifier")==0 || strcmp(nextp->token,"Constants")==0)
+			 printf("%s \t %s \t %d \t %s\n",nextp->name,nextp->token,nextp->li,nextp->Data);
+ }
 
