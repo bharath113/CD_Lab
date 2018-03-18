@@ -1,0 +1,15 @@
+Lexeme	Type	ArrayDim  Procedure Definition  nesting level  Belongs to Func  Parameters list 
+----------------------------------------------------------------------------------
+b 				float 	0 		0 			1		3		NA
+c 				int 	0 		0 			1		3		NA
+a 				int 	0 		0 			1		3		NA
+main 		   void 	0 		1 			0		3		NA
+c 				int 	0 		0 			1		2		NA
+b 				int 	0 		0 			1		2		NA
+a 				int 	0 		0 			1		2		NA
+hel 			int 	0 		1 			0		2		int, int, 
+c 				int 	0 		0 			1		1		NA
+d 				char 	0 		0 			1		1		NA
+b 				int 	0 		0 			1		1		NA
+a 				int 	0 		0 			1		1		NA
+key 			int 	0 		1 			0		1		int, int, char, 
