@@ -17,6 +17,8 @@ int func_no=0;
 extern int scope_complete();
 int paracnt=0,Oparacnt=0;
 extern int funcCall=0;
+int args_no=0;
+
 
 int scope_complete()
 {
@@ -204,14 +206,22 @@ TT : ID {install();}
    | ID '=' K {if(type_err(temp,$3)!=0) install();}
    | ID '=' NEGNUM {if(type_err(temp,3)!=0) install();}
    | ID '[' L ']' { isArr=1;  install();}
-   | ID '[' L ']' '=' K  {isArr=1;  if(type_err(temp,$6)) install(); }
-   | ID '[' L ']' '=' NEGNUM  {isArr=1;  if(type_err(temp,3)) install(); }
-   | ID '[' L ']' '=' assin  {isArr=1; if(temp==2)if($6==2){ printf( "\nERROR: Semantic error : Type mismatch! at %d : %d\n",line,cnt); } if(type_err(temp,$6)) install(); };
+   | ID '[' L ']' '=' str  {isArr=1;  if(type_err(temp,2)) install(); }
+   | ID '[' L ']' '=' assin  {  isArr=1; 
+        						int i=atoi(arrDim);
+        						//printf("1.----%d'''%d\n",i,args_no);
+        						args_no=0;
+   								if(temp==2 && $6==2 && args_no>1){ printf( "\nERROR: Semantic error : Type mismatch! at %d : %d\n",line,cnt); }       
+          						if(type_err(temp,$6)) install();
+          					 };
 L: NUM {strcpy(arrDim,temp_val);}
+str: CHARVAL {$$=2;}
+    | STRING {$$=2;} ;
+
 
 assin : FO val FC {$$=$2;};
-val : typ COMMA val { $$=type_err(temp,$1); }
-   | typ { $$=type_err(temp,$1); }
+val : val COMMA val { $$=type_err($1,$3); }
+   | typ { $$=type_err(temp,$1); args_no++;}
    | ;
 typ : NUM {$$=3;}
     | NEGNUM {$$=3;}
@@ -302,7 +312,7 @@ void yyerror()
 int main()
  {
  
-  yyin=fopen("testcase1.c","r");
+  yyin=fopen("file.txt","r");
   yyparse();
   print();
  }
