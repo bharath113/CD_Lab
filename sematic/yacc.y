@@ -1,42 +1,64 @@
 %{
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "symbol_table.h"
-extern int column=0;
+
 extern int line;
 extern int cnt;
-extern char *yytext,tempid[100];
-extern int temp=3,err=0,err1=0,tchk=3;
-int undec=0;
+extern char *yytext,tempid[100],temp_val[100], proName[20];
+extern int temp=3,isArr=0;
+extern char arrDim[10], list[10];
+int templist[10];
+extern int proDef=0;
+extern int nestlvl;
+int func_arg=0;
+int func_no=0;
+extern int scope_complete();
+int paracnt=0,Oparacnt=0;
+extern int funcCall=0;
 
-
-install()
+int scope_complete()
 {
-	symrec *s;
-	s = getsym (tempid);
+ update(nestlvl);
+}
+
+void install()
+{
+	symtbl *s;	
+	s = getsym (tempid,nestlvl,func_no,funcCall);
 	if (s == 0)
-	s = putsym (tempid,temp);
+	{
+	 if(proDef==1)
+	   strcpy(proName,tempid);
+	s = putsym(tempid,temp,arrDim,list,proDef,nestlvl,isArr,func_no,func_arg);}
 	else
 	{
-		printf( "\nERROR: Semantic error at Pos : %d : %d : %s is already defined as %s\n",line,cnt,s->name,s->type );
-		err1=1;
-		
+	   int k = s->nestingLevel;
+	   if(nestlvl == k)
+	   {
+		printf( "\nERROR: Semantic error in line %d : %s is already defined as %s\n",line,s->name,s->type );
+
+		}
+	   else
+	   {
+	    s = putsym (tempid,temp,arrDim,list,proDef,nestlvl,isArr,func_no,func_arg);
+	   }
 	}
+	strcpy(temp_val,"");
+	strcpy(arrDim,"0");
+	isArr=0;
 }
+
+
 
 int context_check()
 {
-	symrec *s;
-	s = getsym(tempid);
-	if (s == 0 )
+	symtbl *s;
+	s = getsym(tempid,nestlvl,func_no,funcCall);          
+	if (s != 0 && nestlvl >= s->nestingLevel)
 	{
-		printf( "\nERROR: Semantic error at Pos : %d : %d : %s is an undeclared identifier\n",line,cnt,tempid);//exit(0);
-		err1=1;
-		undec=1;		
-	}
-	else
-	{
-        if(strcmp(s->type,"void")==0)
+		if(strcmp(s->type,"void")==0)
             return(1);
         if(strcmp(s->type,"int")==0)
             return(3);
@@ -44,54 +66,116 @@ int context_check()
             return(4);
         if(strcmp(s->type,"char")==0)
 	        return(2);
+    }
+	else
+	{
+	    
+	       	printf( "\nERROR: Semantic error in line %d : %s is an undeclared identifier in this level\n",line,tempid);
+	       	//exit(0);
+		return 0;
+	   
 	}
 }
 
 int type_err(int t1,int t2)
 {
 	if(t2 == 0)
-		t2 = tchk;
-	if(t1!=t2&&undec==0)
+		t2 = temp;
+    if(t1==4&&t2==3)
+        return t1;
+    else if(t1==3&&t2==4)
+        return t1;
+    
+   
+	if(t1!=t2  && t1!=0) 
 	{
-		printf( "\nERROR: Semantic error : Type mismatch! at %d : %d\n\n",line,cnt);
-		err1=1;
-		return -1;
+		printf( "\nERROR: Semantic error : Type mismatch! at %d : %d\n",line,cnt);
+		return 0;
 	}
-	tchk=3;
-        undec=0;
-    return t1;
+	
+    if(t1==t2)
+      return t1;
+    else
+    {
+      return 0;
+    }
 }
 
+int update_cnt()
+{
+ updatecnt(proName,func_no,Oparacnt,templist);   
+ Oparacnt=0;      
+}
+
+int check_bound()
+{
+  symtbl *s;
+  int val;
+	s = getsym(tempid,nestlvl,func_no,funcCall);
+    val=strcmp(temp_val,s->arrDim);
+    if(val==0)
+      return 1;
+    else 
+      return 0;
+}
+
+int check_paracnt()
+{
+ int s;
+ s = isCntValid(proName,paracnt,templist);
+ if(s==0)
+  {
+   printf( "\nERROR: Semantic error : Two few arguments %d \n",line,cnt);
+  }
+  else if(s==-1)
+   {
+    printf("\nERROR: Semantic error : Two many arguments %d : %d\n",line,cnt);
+   }
+  else if(s==-2)
+  {
+   printf("\nERROR: Semantic error :Type mismatch in arguments %d : %d\n",line,cnt);
+  }
+}
 %}
 
-%token ID NUM TYPE HEAD WHILE OP COP FOR UN IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC
+%token ID FNUM NUM HEAD WHILE OP COP FOR UN IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC INT CHAR FLOAT VOID STRING CHARVAL NEGNUM MINUS MAIN
 
 %% 
 S : Header Start {printf("\nParsing Completed\n");
-                  printf("Lexeme\tDescription\tLine no\tType\n");
-                  printf("------------------------------------------------------------\n");
+                  printf("Lexeme\tType\tArrayDim  Procedure Definition  nesting level  Belongs to Func  Parameters list \n");
+                  printf("----------------------------------------------------------------------------------\n");
 		  print();
+		  
+printf("\nNOTE: in Procedure definition \n0: It is not a procedure call\n1: It is a procedure call\nIf array Dimention is 0 then it is not an array\n");
 		  exit(0);
 		 }
 Header : HEAD Header 
        | 
        ;
 
-Start : TYPE ID BO ARG BC FO BODY FC Start
-      | 
+
+Start : Start Type Name BO ARGs BC FO BODY FC Start {func_no--;}
+      |   {func_no++;} 
       ; 
+Name: ID {proDef=1; install(); proDef=0;Oparacnt=0; }
 
-ARG : TYPE ID {install();}
-    | TYPE ID COMMA ARG {install();}
-    | 
-    ;
+ARGs: ARG {  update_cnt();func_arg=0;};
+    |  ;
+ARG: ARG COMMA ARG { func_arg=1;}
+   | Type ID {Oparacnt++; templist[Oparacnt-1]=temp; install(); func_arg=1;};
+   
+Type  : INT {temp = 3;}
+      | FLOAT {temp = 4;}
+      | CHAR {temp = 2;} 
+      | VOID {temp =1; } ;
+   
 
-BODY : Bb BODY
+BODY : Bb BODY 
      |
      |error
      ;
 
-Bb :  R SEMI 
+Bb : R SEMI 
    | DEC SEMI
    | WLOOP 
    | FLOOP 
@@ -99,27 +183,71 @@ Bb :  R SEMI
    | EXP SEMI 
    | RET SEMI 
    | BREAK SEMI
-   | SEMI ;
+   | SEMI
+   | COND SEMI
+   | pcall SEMI  ;
 
-single : R SEMI
-       |DEC SEMI
-       |WLOOP
-       |FLOOP
-       |RET SEMI
-       |BREAK SEMI
-       |EXP SEMI
-       |COND SEMI
-       | IFEL 
-       | SEMI ;
+pcall : P BO v BC {check_paracnt(); paracnt=0; $$=$1;};
+P: ID {strcpy(proName,tempid); funcCall=1; $$ = context_check();funcCall=0;}
+v : vari | ;
+vari  : vari COMMA vari 
+      | K {paracnt++; templist[paracnt-1]=$1;};
+      
 
-RET :  RETURN K 
+DEC : Type VAR
+ 
+VAR : TT COMMA VAR;
+    | TT  
+    | error;
+    
+TT : ID {install();}
+   | ID '=' K {if(type_err(temp,$3)!=0) install();}
+   | ID '=' NEGNUM {if(type_err(temp,3)!=0) install();}
+   | ID '[' L ']' { isArr=1;  install();}
+   | ID '[' L ']' '=' K  {isArr=1;  if(type_err(temp,$6)) install(); }
+   | ID '[' L ']' '=' NEGNUM  {isArr=1;  if(type_err(temp,3)) install(); }
+   | ID '[' L ']' '=' assin  {isArr=1; if(temp==2)if($6==2){ printf( "\nERROR: Semantic error : Type mismatch! at %d : %d\n",line,cnt); } if(type_err(temp,$6)) install(); };
+L: NUM {strcpy(arrDim,temp_val);}
+
+assin : FO val FC {$$=$2;};
+val : typ COMMA val { $$=type_err(temp,$1); }
+   | typ { $$=type_err(temp,$1); }
+   | ;
+typ : NUM {$$=3;}
+    | NEGNUM {$$=3;}
+    | FNUM {$$=4;} 
+    | CHARVAL {$$=2;}
+    | STRING {$$=2;} ;
+
+
+CHE : ID {$$=context_check();}
+    | ID '[' NUM ']' { $$=context_check();
+                        /*if(check_bound()==0&&$$!=0) 
+                       printf("the index is out of range at %d : %d\n",line,cnt);*/
+                     }
+    | ID '[' CHE ']' {if(type_err(3,$3)) $$=context_check();} ;
+    
+    
+RET :  RETURN K
+    |  RETURN R
     | RETURN BREAK
     | error ;
 
-K : ID {$$=context_check();}
-  |NUM {temp=3;};
+COND : EXP COP COND 
+     | EXP 
+     | error;
+EXP : CHE OP K {$$=type_err($1,$3);}
+    | K 
+    | error;
 
-R : CHE '=' A {$$=type_err($1,$3);}
+K : CHE {$$=$1;} 
+  | NUM {$$=3;}
+  | FNUM {$$=4;};
+  | CHARVAL {$$=2;}
+  | STRING {$$=2;}
+
+R : CHE '=' A {$$=type_err($1,$3); }
+  | CHE '=' pcall {$$=type_err($1,$3);}
   | A {$$=$1;}
   | error ;
 A : A '+' B { $$=type_err($1,$3);}
@@ -128,52 +256,38 @@ A : A '+' B { $$=type_err($1,$3);}
 B : B '*' C {$$=type_err($1,$3);}
   | B '/' C {$$=type_err($1,$3);}
   | C {$$=$1;};
-C : ID UN {$$=context_check();}
-  | ID {$$=context_check();}
-  | NUM {$$=3;}
-  | '(' A ')' {$$=$1;};
-CHE : ID {$$=context_check();}
-DEC : TYPE VAR 
-VAR : TT COMMA VAR;
-    | TT  
-    | error;
-TT : ID  {install();}
-   | ID '=' ID {install();}
-   | ID '=' NUM;
+C : CHE UN { type_err($1,3);}
+  | K {$$=$1;};
+  | '(' NEGNUM ')' {$$=3;}
+  | '(' A ')' {$$=$2;};
+  
+  
 
+    
 WLOOP : WHILE BO COND BC WDEF 
       | error;
 WDEF : FO BODY FC 
-     | single ;
+     | Bb ;
 
-COND : EXP COP COND {$$=type_err($1,$3);}
-     | EXP {$$=$1;}
-     | error;
-EXP : CHE {$$=context_check();}
-    | CHE OP CHE {$$=type_err($1,$3);}
-    | CHE OP NUM {$$=type_err($1,$3);}
-    |NUM {$$=3;}
-    | error;
 
-FLOOP : FOR BO Aa SEMI Bb SEMI Cc BC FDEF ;
-Aa : TYPE R
-   | R
-   |
-   ;
-Bb : COND 
-   |
-   ;
-Cc : R
-   | 
-   ;
+FLOOP : FOR BO argu SEMI con SEMI inc BC FDEF;
+argu : DEC 
+     | ;
+con  : con COMMA COND
+     | COND 
+     | ;
+inc  : inc COMMA R
+     | R
+     | ;
+     
 FDEF : FO BODY FC 
-     | single ;
+     | Bb ;
 
 IFEL : IF BO COND BC IDEF 
      | IF BO COND BC IDEF ELSE IDEF ;
-
+     
 IDEF : FO BODY FC 
-     | single ;
+     | Bb ;
 
 %%
 
@@ -181,14 +295,14 @@ extern int yylineno;
 extern void printa();
 void yyerror()
  {
-  printf("Invalid expression at %d \n",yylineno);
+  printf("Invalid expression at %d : %d\n",line,cnt);
  }
  extern FILE *yyin;
  extern FILE *yyout;
 int main()
  {
  
-  yyin=fopen("file.txt","r");
+  yyin=fopen("testcase1.c","r");
   yyparse();
   print();
  }
