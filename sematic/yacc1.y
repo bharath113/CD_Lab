@@ -46,7 +46,7 @@ void install()
 	   if(nestlvl == k)
 	   {
 		printf( "\nERROR: Semantic error in line %d : %s is already defined as %s\n",line,s->name,s->type );
-
+                
 		}
 	   else
 	   {
@@ -144,6 +144,7 @@ int check_paracnt()
    printf("\nERROR: Semantic error :Type mismatch in arguments %d : %d\n",line,cnt);
   }
 }
+
 %}
 
 %token ID FNUM NUM HEAD WHILE OP COP FOR UN IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC INT CHAR FLOAT VOID STRING CHARVAL NEGNUM MINUS MAIN
@@ -195,8 +196,8 @@ Bb : R SEMI
    | COND SEMI
    | pcall SEMI  ;
 
-pcall : P BO v BC {check_paracnt(); paracnt=0; $$=$1;};
-P: ID {strcpy(proName,tempid); funcCall=1; $$ = context_check();funcCall=0;}
+pcall : P BO v BC { if($$!=0)check_paracnt(); paracnt=0; $$=$1;};
+P: ID {strcpy(proName,tempid); funcCall=1; $$ = context_check(); funcCall=0;}
 v : vari | ;
 vari  : vari COMMA vari 
       | K {paracnt++; templist[paracnt-1]=$1;};
@@ -311,7 +312,6 @@ void yyerror()
  extern FILE *yyout;
 int main()
  {
- 
   yyin=fopen("file.txt","r");
   yyparse();
   print();
