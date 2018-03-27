@@ -156,6 +156,7 @@ symtbl *getsym(char *sym_name,int nestlvl,int func_no,int funcCall)
     for(ptr=sym_table;ptr!=(symtbl *)0;ptr=(symtbl *)ptr->next)
      if(strcmp(ptr->name,sym_name)==0 && ptr->proDef == 1)
       return ptr;
+    return 0;
     }
    else
 	for(ptr=sym_table;ptr!=(symtbl *)0;ptr=(symtbl *)ptr->next)
