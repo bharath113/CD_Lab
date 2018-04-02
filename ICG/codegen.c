@@ -20,21 +20,19 @@ struct stac*left;
 struct stac*right;
 };
 
-void createlabel();
-void createlabelforend();
-void createlabelforin();
-void gotoforincre();
-void createlabelforincrement();
-void onlyfor(struct stac*);
-void createfun(char *);
-void onlyif(struct stac*);
-void createlabelforonlyif();
-void afteronlyif();
 void icgif(struct stac*);
 void icgwhile(struct stac*d);
-int searchforupdate(struct stac*);
-void storeinextrastack(struct stac *);
-struct stac* searchinextrastack(struct stac* ,int );
+void onlyfor(struct stac*);
+void onlyif(struct stac*);
+void labelforwhile();
+void labelforend();
+void labelforin();
+void gotoforincre();
+void labelforincrement();
+void createfun(char *);
+void labelforonlyif();
+void afteronlyif();
+
 
 int while_cnt=0;
 int z;
@@ -201,7 +199,7 @@ void icgwhile(struct stac*d)
     printf("\t%d : IF NOT %s GOTO %s\n",whilopen[z],d->sta,wopen[z]);
 }
 
-void createlabel()
+void labelforwhile()
 {
 	z=while_cnt++;
 	char c[100];
@@ -220,32 +218,9 @@ void creategoto()
 	printf("    %s: \n",wopen[z]);
 }
 
-void creategotoif()
-{
-	y=--ifelse_cnt;
-	g=x-1;
-	printf("\tGOTO %s\n",ifafter[g]);
-	printf("    %s : \n",ifelse[y]);
-}
 
-void afterif()
-{
-	printf("    %s: \n",ifafter[--x]);
-}
 
-void createlabelforifafter()
-{
-    char c[100];
-	char b[100];
-	strcpy(b,"L");
-    itoa(f,c,10);
-	f++;
-	strcat(b,c);
-	strcpy(ifafter[x],b);
-	x++;
-}
-
-void createlabelforifelse()
+void labelforifelse()
 {
 	y=ifelse_cnt++;
     char c[100];
@@ -259,13 +234,40 @@ void createlabelforifelse()
 
 void icgif(struct stac*d)
 {
-	createlabelforifelse();
+labelforifelse();
 printf("\t%d : IF NOT %s GOTO %s\n",adds++,d->sta,ifelse[y]);
 }
 
+void creategotoif()
+{
+	y=--ifelse_cnt;
+	g=x-1;
+	printf("\tGOTO %s\n",ifafter[g]);
+	printf("    %s : \n",ifelse[y]);
+}
+
+void afterif()
+{
+	printf("    %s: \n",ifafter[--x]);
+}
+
+void labelforifafter()
+{
+    char c[100];
+	char b[100];
+	strcpy(b,"L");
+    itoa(f,c,10);
+	f++;
+	strcat(b,c);
+	strcpy(ifafter[x],b);
+	x++;
+}
+
+
+
 void onlyif(struct stac*d)
 {
-createlabelforonlyif();
+labelforonlyif();
 printf("\t%d : IF NOT %s GOTO %s\n",adds++,d->sta,ifonly[y]);
 }
 
@@ -281,7 +283,7 @@ void afteronlyif()
   ifelse_cnt--;
 }
 
-void createlabelforonlyif()
+void labelforonlyif()
 {
     char c[100];
 	char b[100];
@@ -297,18 +299,31 @@ void createfun(char *s)
 printf("\tCALL  %s\n",s);
 }
 
+
+
 void onlyfor(struct stac*d)
 {
 forstart=adds;
-createlabelforend();
+labelforend();
 printf("\t%d : IF NOT %s GOTO %s\n",adds++,d->sta,forend[h]);
-createlabelforin();
+labelforin();
 printf("\tGOTO %s\n",forin);
-createlabelforincrement();
+labelforincrement();
 printf("    %s: \n",forincre);
 }
 
-void createlabelforend()
+void labelforin()
+{
+    char c[100];
+	char b[100];
+	strcpy(b,"L");
+    itoa(f,c,10);
+	f++;
+	strcat(b,c);
+	strcpy(forin,b);
+}
+
+void labelforend()
 {
     h=fortp++;
     char c[100];
@@ -320,18 +335,8 @@ void createlabelforend()
 	strcpy(forend[h],b);
 }
 
-void createlabelforin()
-{
-    char c[100];
-	char b[100];
-	strcpy(b,"L");
-    itoa(f,c,10);
-	f++;
-	strcat(b,c);
-	strcpy(forin,b);
-}
 
-void createlabelforincrement()
+void labelforincrement()
 {
     char c[100];
 	char b[100];
