@@ -35,7 +35,7 @@ void afteronlyif();
 
 
 int while_cnt=0;
-int z;
+int whind;
 int ifelse_cnt=0;
 int y;
 int x=0,g;
@@ -56,8 +56,6 @@ int increstart[100];
 int f=0;
 struct stac *stack_list[100];
 
-struct stac *extra_stac[10000];
-int extra_cnt=0;
 
 int stac_count=0;
 
@@ -113,7 +111,7 @@ char* itoa(int num, char* str, int base)
 
 void putin(char s[100])
 {
-struct stac *temp,*temp1,*pk;
+struct stac *temp,*temp1;
 temp= (struct stac*)malloc(sizeof(struct stac));
 strcpy(temp->ope,"@");
 strcpy(temp->sta,s);
@@ -121,7 +119,7 @@ temp->left=NULL;
 temp->right=NULL;
 temp->updated=0;
 symbol_table *d;	
-	d = take_symbol(temp->sta,nestlvl,func_no,funcCall);
+	d = get_symbol(temp->sta,nestlvl,func_no,funcCall);
 	if(d!=NULL)
 	{
 	temp->nestl=d->nestingLevel;
@@ -133,7 +131,7 @@ stack_list[stac_count++]=temp;
 
 void create_tree(int k)
 {
-struct stac* tmp,*pk;
+struct stac* tmp;
 char var[10];
 char c[100];
 char d[100]="T";
@@ -195,27 +193,27 @@ printf("\t%d : %s %s %s\n",tmp->add,tmp->left->sta,var,tmp->right->sta);
 
 void icgwhile(struct stac*d)
 {
-	whilopen[z]=adds++;
-    printf("\t%d : IF NOT %s GOTO %s\n",whilopen[z],d->sta,wopen[z]);
+	whilopen[whind]=adds++;
+    printf("\t%d : IF NOT %s GOTO %s\n",whilopen[whind],d->sta,wopen[whind]);
 }
 
 void labelforwhile()
 {
-	z=while_cnt++;
+	whind=while_cnt++;
 	char c[100];
 	char b[100];
 	strcpy(b,"L");
     itoa(f,c,10);
 	f++;
 	strcat(b,c);
-	strcpy(wopen[z],b);
+	strcpy(wopen[whind],b);
 }
 
 void creategoto()
 {
-	z=--while_cnt;
-	printf("\tGOTO %d\n",whilopen[z]-1);
-	printf("    %s: \n",wopen[z]);
+	whind=--while_cnt;
+	printf("\tGOTO %d\n",whilopen[whind]-1);
+	printf("    %s: \n",wopen[whind]);
 }
 
 

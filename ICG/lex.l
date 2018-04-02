@@ -44,8 +44,8 @@ float       						{  cnt+=yyleng; return FLOAT;}
 char        						{  cnt+=yyleng; return CHAR;}
 void        						{  cnt+=yyleng;  return VOID;}
 main        						{strcpy(tempid,yytext); cnt+=yyleng;  return ID;}
-"++"							{return plpl;}
-"--"							{return pipi;}
+"++"							{return PP;}
+"--"							{return MM;}
 ";"         						{ cnt+=yyleng; return SEMI;}
 ","         { cnt+=yyleng;  return COMMA;}
 "("         { nestlvl++; cnt+=yyleng; return BO;}

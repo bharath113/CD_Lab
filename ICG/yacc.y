@@ -30,7 +30,7 @@ int scope_check()
 void insert()
 {
 	symbol_table *s;	
-	s = take_symbol (tempid,nestlvl,func_no,funcCall);
+	s = get_symbol(tempid,nestlvl,func_no,funcCall);
 	if (s == 0)
 	{
 	 if(proDef==1)
@@ -59,7 +59,7 @@ void insert()
 int context_check()
 {
 	symbol_table *s;
-	s = take_symbol(tempid,nestlvl,func_no,funcCall);          
+	s = get_symbol(tempid,nestlvl,func_no,funcCall);          
 	if (s != 0 && nestlvl >= s->nestingLevel)
 	{
 		if(strcmp(s->type,"void")==0)
@@ -118,7 +118,7 @@ int check_bound()
 {
   symbol_table *s;
   int val;
-	s = take_symbol(tempid,nestlvl,func_no,funcCall);
+	s = get_symbol(tempid,nestlvl,func_no,funcCall);
     val=strcmp(temp_val,s->arrDim);
     if(val==0)
       return 1;
@@ -145,7 +145,7 @@ int check_parameters_count()
 }
 %}
 
-%token plpl pipi ID FNUM NUM HEAD WHILE OP COP FOR IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC INT CHAR FLOAT VOID STRING CHARVAL NEGNUM MINUS MAIN
+%token PP MM ID FNUM NUM HEAD WHILE OP COP FOR IF ELSE RETURN ASSIGNMENT BREAK SEMI COMMA BO BC FO FC INT CHAR FLOAT VOID STRING CHARVAL NEGNUM MINUS MAIN
 
 %% 
 S : Header Start {printf("\nParsing Completed\n");
@@ -167,7 +167,7 @@ Header : HEAD Header
 Start : Start Type Name {printf("%s\n",tempid);}BO ARGs BC FO BODY FC {printf("EXIT\n");}Start {func_no--;}
       |   {func_no++;} 
       ; 
-Name: ID {proDef=1; insert(); proDef=0;Oparameters_count=0; }
+Name: ID {proDef=1; insert(); proDef=0;Oparameters_count=0; };
 
 ARGs: ARG {  update_cnt();func_arg=0;};
     |  ;
@@ -180,7 +180,7 @@ Type  : INT {temp = 3;}
       | VOID {temp =1; } ;
    
 
-BODY : Bb BODY 
+BODY : Bb +Y 
      |
      |error
      ;
@@ -277,13 +277,13 @@ B : B '*' C {create_tree(3);$$=type_err($1,$3);}
 C : K {$$=$1;};
   | '(' NEGNUM ')' {$$=3;}
   | '(' A ')' {$$=$2;}
-  | CHE plpl {putin(tempid);putin("1");create_tree(1);create_tree(0);type_err($1,3);}
-  | CHE pipi { putin(tempid);putin("1");create_tree(2);create_tree(0);type_err($1,3);};
+  | CHE PP {putin(tempid);putin("1");create_tree(1);create_tree(0);type_err($1,3);}
+  | CHE MM { putin(tempid);putin("1");create_tree(2);create_tree(0);type_err($1,3);};
   
   
 
     
-WLOOP :  {createlabel();whilecame=1;ifcame=0;forfor=0;} WHILE BO COND BC WDEF {creategoto();}
+WLOOP :  {labelforwhile();whilecame=1;ifcame=0;forfor=0;} WHILE BO COND BC WDEF {creategoto();}
       | error;
 WDEF : FO BODY FC 
      | Bb ;
@@ -303,7 +303,7 @@ FDEF : FO BODY FC
      | Bb ;
 
 IFEL : IF BO COND BC IDEF {afteronlyif();}
-     | IF BO COND BC IDEF ELSE {createlabelforifafter();creategotoif();} IDEF {afterif();};
+     | IF BO COND BC IDEF ELSE {labelforifafter();creategotoif();} IDEF {afterif();};
 
 IDEF : FO BODY FC 
      | Bb ;

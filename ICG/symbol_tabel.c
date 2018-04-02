@@ -18,7 +18,7 @@ struct symbol_table
 typedef struct symbol_table symbol_table;
 symbol_table *sym_table = NULL;
 symbol_table *insert_symbol();
-symbol_table *take_symbol();
+symbol_table *get_symbol();
 symbol_table *print_symbol_table();
 symbol_table *update_scope();
 symbol_table *update_parameters();
@@ -143,7 +143,7 @@ symbol_table *insert_symbol(char *sym_name,int sym_type,char *arrDim, char *list
 	strcpy(ptr->name,sym_name);
 	strcpy(ptr->type,type);
     strcpy(ptr->arrDim,arrDim);
-    strcpy(ptr->list,list);
+    strcpy(ptr->list,"NA");
     ptr->nestingLevel=nestlvl;
     ptr->proDef=proDef;
     ptr->is_array=is_array;
@@ -156,7 +156,7 @@ symbol_table *insert_symbol(char *sym_name,int sym_type,char *arrDim, char *list
 	return ptr;
 }
 
-symbol_table *take_symbol(char *sym_name,int nestlvl,int func_no,int funcCall)
+symbol_table *get_symbol(char *sym_name,int nestlvl,int func_no,int funcCall)
 {
 	symbol_table *ptr;
     if(funcCall==1)
