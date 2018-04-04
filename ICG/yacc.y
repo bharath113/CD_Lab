@@ -180,7 +180,7 @@ Type  : INT {temp = 3;}
       | VOID {temp =1; } ;
    
 
-BODY : Bb +Y 
+BODY : Bb BODY 
      |
      |error
      ;
