@@ -2,6 +2,7 @@
 
 ### B.Bharath Kumar 15CO113
 ### Aditya Bisht 15CO104
+This project is for education purpose only. It is part of the lab course.
 
 ## Phase 1 - Scanner
 1. Implement char, int and float data types.
